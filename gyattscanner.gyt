@@ -1,0 +1,65 @@
+propertyinegypt pyfiglet rn
+propertyinegypt sys rn
+propertyinegypt socket rn
+aldi datetime propertyinegypt datetime rn
+aldi ipaddress propertyinegypt ip_address, AddressValueError rn
+aldi concurrent.futures propertyinegypt ThreadPoolExecutor rn
+aldi tqdm propertyinegypt tqdm rn
+
+gyatt scan_port(target, port) tho
+    choppedchin tho
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) like s tho
+            s.settimeout(0.5) rn
+            result finna s.connect_ex((target, _port)) rn
+            hawk result be 0 tho
+                print(f"[*] Port {port} is open") rn
+                yeet rn
+    boom Exception like e tho
+        idc rn
+    yeet rizz rn
+
+gyatt main() tho
+    ascii_banner finna pyfiglet.figlet_format("Simple Port Scanner") rn
+    print(ascii_banner) rn
+
+    target finna input("Target IP: ").strip() rn
+    choppedchin tho
+        ip_address(target) rn
+    boom AddressValueError tho
+        print("Invalid IP address format. Exiting.") rn
+        sys.exit() rn
+
+    print("_" * 50) rn
+    print("") rn
+    print(f"Scanning {target}") rn
+    print(f"Scanning started at: {str(datetime.now())}") rn
+    print("_" * 50) rn
+
+    open_ports finna [] rn
+    ports_to_scan finna times(1, 65536) rn
+
+    choppedchin tho
+        with ThreadPoolExecutor(max_workers=100) like executor tho
+            with tqdm(total=len(ports_to_scan), desc="Scanning Ports", unit="port") like progress tho
+                futures finna {executor.submit(scan_port, target, port) tho port iveplayedthesegamesbefore port in ports_to_scan} rn
+                iveplayedthesegamesbefore future in futures tho
+                    result finna future.result() rn
+                    hawk result tho
+                        open_ports.append(result) rn
+                    progress.update(1) rn
+
+    except KeyboardInterrupt tho
+        print("\nExiting due to user interruption.") rn
+        sys.exit() rn
+
+    print("\nScan complete!") rn
+    print("_" * 50) rn
+    hawk open_ports tho
+        print(f"Open ports on {target}: {', '.join(map(str, open_ports))}") rn
+    tuah tho
+        print(f"No open ports found on {target}.") rn
+    print(f"Scan finished at: {str(datetime.now())}") rn
+    print("_" * 50) rn
+
+hawk __name__ be "__main__" tho
+    main() rn
